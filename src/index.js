@@ -6,29 +6,42 @@ const ulRef = document.querySelector('.js-menu');
 const bodyRef = document.querySelector('body');
 const switchRef = document.querySelector('.js-switch-input');
 
-
 const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
 
-const item = liMenuTemplate(menu);
-ulRef.insertAdjacentHTML('afterbegin',item);
+const drawHtml = () => {
+  const item = liMenuTemplate(menu);
+  ulRef.insertAdjacentHTML('afterbegin',item);
+}
+
+drawHtml();
+
+const delClassElem = () => {
+  bodyRef.classList.remove(Theme.LIGHT, Theme.DARK);
+}
+
+const updateLocalStorage = (str) => {
+  localStorage.setItem('theme', str);
+}
+
+const updateTheme = (str) => {
+  bodyRef.classList.add(str);
+}
 
 switchRef.addEventListener('change', () => {
-  let darkTheme = switchRef.checked ? true : false;
-  if(darkTheme){
-    localStorage.setItem('theme', darkTheme);
-    bodyRef.classList.remove(Theme.LIGHT);
-    bodyRef.classList.add(Theme.DARK);
+  delClassElem();
+  if(switchRef.checked){
+    updateLocalStorage('darkTheme');
+    updateTheme(Theme.DARK);
   }else{
-    localStorage.setItem('theme', darkTheme);
-    bodyRef.classList.remove(Theme.DARK);
-    bodyRef.classList.add(Theme.LIGHT);
+    updateLocalStorage('lightTheme');
+    updateTheme(Theme.LIGHT);
   }
 });
 
-if(localStorage.getItem('theme') === 'true'){
+if(localStorage.getItem('theme') === 'darkTheme'){
   switchRef.setAttribute('checked', true);
-  bodyRef.classList.add(Theme.DARK);
+  updateTheme(Theme.DARK);
 }
